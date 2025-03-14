@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test": "npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules jest dist/",
     "dev": "nodemon",
     "build": "tsc",
     "start": "node dist/index.js",

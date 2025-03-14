@@ -9,5 +9,9 @@
       "jest",
       "node"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/__tests__/**/*.ts"
+  ]
 }
