@@ -1,4 +1,7 @@
 import express from 'express'
+import { initDatabase } from './db/init.js'
+initDatabase()
+
 const app = express()
 const port = 3000
 
@@ -9,6 +12,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`)
 })
-
-import { sayHello } from './greetings.js'
-sayHello('TypeScript')
