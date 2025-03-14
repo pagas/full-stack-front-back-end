@@ -4,11 +4,14 @@
   "type": "module",
   "scripts": {
     "test": "jest",
+    "test:debug": "cross-env NODE_OPTIONS='--inspect-brk' jest --runInBand",
     "dev": "nodemon",
+    "dev:debug": "nodemon --inspect",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "cross-env NODE_ENV=production node -r dotenv/config dist/index.js",
     "lint": "eslint ./src --ext .ts",
-    "debug": "npm run build && cross-env NODE_OPTIONS='--experimental-vm-modules --inspect-brk' jest --runInBand dist/"
+    "lint:fix": "eslint ./src --ext .ts --fix",
+    "debug": "cross-env NODE_OPTIONS='--inspect-brk' node dist/index.js"
   },
   "author": "",
   "license": "ISC",
