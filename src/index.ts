@@ -1,5 +1,8 @@
 import express from 'express'
 import { initDatabase } from './db/init.js'
+import dotenv from 'dotenv'
+
+dotenv.config() // Load environment variables from .env file
 await initDatabase()
 
 // import { Post } from './db/models/post.js'
