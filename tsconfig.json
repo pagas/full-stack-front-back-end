@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "es2022",
-    "outDir": "dist",
-    "strict": true,
+    "module": "NodeNext", // Enables ESM support for Node.js
+    "moduleResolution": "node16", // Resolves modules using Node.js's ESM rules
+    "target": "ESNext", // Outputs modern JavaScript (ES2020+)
+    "outDir": "dist", // Specifies the output directory for compiled files
+    "strict": true, // Enables strict type-checking
+    "esModuleInterop": true, // Ensures compatibility with CommonJS modules
+    "forceConsistentCasingInFileNames": true, // Enforces consistent file name casing
+    "skipLibCheck": true, // Skips type checking for declaration files
     "types": [
-      "jest",
-      "node"
-    ]
+      "node",
+      "jest"
+    ], // Includes Node.js type definitions
+    "allowSyntheticDefaultImports": true // Allows default imports for CommonJS modules
   },
   "include": [
     "src/**/*.ts",

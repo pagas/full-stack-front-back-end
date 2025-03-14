@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": "ts",
   "ignore": ["dist"],
-  "exec": "tsc && node -r dotenv/config dist/index.js"
+  "exec": "node --loader ts-node/esm -r dotenv/config src/index.ts"
 }
