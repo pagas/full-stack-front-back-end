@@ -6,8 +6,8 @@ export interface IPost extends Document {
   author?: string
   contents?: string
   tags?: string[]
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 // Define the schema
