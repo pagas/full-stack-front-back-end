@@ -8,18 +8,26 @@ interface QueryOptions {
 
 type QueryFilter = {
   author?: string
-  tags?: string
+  tags?: string[]
 }
+
+export type QueryParams = QueryOptions & QueryFilter
 
 export async function createPost(data: Partial<IPost>): Promise<IPost> {
   return Post.create(data)
 }
 
 async function listPosts(
-  query: QueryFilter = {}, // Filter for author or tags
+  query: QueryFilter = {}, // Filter for author or tag
   { sortBy = 'createdAt', sortOrder = 'descending' }: QueryOptions = {},
 ): Promise<IPost[]> {
-  return await Post.find(query).sort({ [sortBy]: sortOrder })
+  const mongoQuery: Record<string, unknown> = { ...query }
+
+  if (query.tags && query.tags.length > 0) {
+    mongoQuery.tags = { $in: query.tags }
+  }
+
+  return await Post.find(mongoQuery).sort({ [sortBy]: sortOrder })
 }
 
 export async function listAllPosts(options: QueryOptions): Promise<IPost[]> {
@@ -34,7 +42,7 @@ export async function listPostsByAuthor(
 }
 
 export async function listPostsByTag(
-  tags: string,
+  tags: string[],
   options: QueryOptions,
 ): Promise<IPost[]> {
   return await listPosts({ tags }, options)

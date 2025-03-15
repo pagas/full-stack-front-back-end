@@ -115,7 +115,7 @@ describe('listing posts', () => {
   })
 
   test('should be able to filter posts by tag', async () => {
-    const posts = await listPostsByTag('nodejs', {})
+    const posts = await listPostsByTag(['nodejs'], {})
     expect(posts.length).toBe(1)
   })
 })
