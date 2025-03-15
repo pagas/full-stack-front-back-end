@@ -1,9 +1,8 @@
-import express from 'express'
 import { initDatabase } from './db/init.js'
 import dotenv from 'dotenv'
+import { app } from './app.js'
 
 dotenv.config() // Load environment variables from .env file
-await initDatabase()
 
 // import { Post } from './db/models/post.js'
 
@@ -19,13 +18,11 @@ await initDatabase()
 // const posts = await Post.find()
 // console.log(posts)
 
-const app = express()
-const port = 3000
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`)
-})
+try {
+  await initDatabase()
+  const PORT = process.env.PORT
+  app.listen(PORT)
+  console.info(`express server running on http://localhost:${PORT}`)
+} catch (err) {
+  console.error('error connecting to database:', err)
+}
