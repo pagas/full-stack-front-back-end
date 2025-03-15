@@ -1,7 +1,9 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
+import { ObjectId } from 'mongodb'
 
 // Define an interface representing a document in MongoDB
 export interface IPost extends Document {
+  _id: ObjectId
   title: string
   author?: string
   contents?: string
