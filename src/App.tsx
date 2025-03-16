@@ -1,35 +1,38 @@
-import { useState, JSX } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { CreatePost } from './components/CreatePost.jsx'
+import { PostList } from './components/PostList.jsx'
+import { PostFilter } from './components/PostFilter.jsx'
+import { PostSorting } from './components/PostSorting.jsx'
+import { Post as PostProps } from './types'
 
-function App(): JSX.Element {
-  const [count, setCount] = useState(0)
+const posts: PostProps[] = [
+  {
+    _id: '1',
+    title: 'Full-Stack React Projects',
+    contents: "Let's become full-stack developers!",
+    author: 'Daniel Bugl',
+  },
+  {
+    _id: '2',
+    title: 'Hello React!',
+  },
+]
 
+export function App() {
   return (
-    <>
-      <div>
-        <a href='https://vite.dev' target='_blank' rel='noreferrer'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank' rel='noreferrer'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ padding: 8 }}>
+      <h1>POST FORM</h1>
+      <CreatePost />
+      <br />
+      <hr />
+      <h1>POST FILTER</h1>
+      Filter by:
+      <PostFilter field='author' />
+      <br />
+      <h1>POST SORTING</h1>
+      <PostSorting fields={['createdAt', 'updatedAt']} />
+      <hr />
+      <h1>POST LIST</h1>
+      <PostList posts={posts} />
+    </div>
   )
 }
-
-export default App
