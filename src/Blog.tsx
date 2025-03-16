@@ -5,15 +5,17 @@ import { PostSorting } from './components/PostSorting.js'
 import { useQuery } from '@tanstack/react-query'
 import { getPosts, PostSortBy, PostSortOrder } from './api/posts.js'
 import { useState, JSX } from 'react'
+import { useDebounce } from 'use-debounce'
 
 export function Blog(): JSX.Element {
   const [author, setAuthor] = useState('')
+  const [debouncedAuthor] = useDebounce(author, 500) // 500ms delay
   const [sortBy, setSortBy] = useState<PostSortBy>('createdAt')
   const [sortOrder, setSortOrder] = useState<PostSortOrder>('descending')
 
   const postsQuery = useQuery({
-    queryKey: ['posts', { author, sortBy, sortOrder }],
-    queryFn: () => getPosts({ author, sortBy, sortOrder }),
+    queryKey: ['posts', { author: debouncedAuthor, sortBy, sortOrder }],
+    queryFn: () => getPosts({ author: debouncedAuthor, sortBy, sortOrder }),
   })
 
   const posts = postsQuery.data ?? []
