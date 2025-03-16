@@ -4,4 +4,7 @@ backend
 .vscode
 .git
 .husky
-.commitlintrc.json
+commitlint.config.js
+.prettierignore
+.prettierrc.json
+eslint.config.js
