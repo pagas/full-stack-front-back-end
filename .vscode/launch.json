@@ -12,6 +12,7 @@
             ], // Use the dev:debug script
             "port": 9229, // Default Node.js debug port
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/backend",
             "skipFiles": [
                 "<node_internals>/**"
             ]
@@ -27,6 +28,7 @@
             ], // Use the test:debug script
             "port": 9229,
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/backend",
             "skipFiles": [
                 "<node_internals>/**"
             ]
@@ -42,6 +44,7 @@
             ], // Use the debug script
             "port": 9229,
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/backend",
             "skipFiles": [
                 "<node_internals>/**"
             ]

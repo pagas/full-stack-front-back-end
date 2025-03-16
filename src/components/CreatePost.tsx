@@ -1,4 +1,5 @@
-export function CreatePost() {
+import { JSX } from 'react'
+export function CreatePost(): JSX.Element {
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <div>

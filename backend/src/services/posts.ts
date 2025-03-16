@@ -23,6 +23,9 @@ async function listPosts(
 ): Promise<IPost[]> {
   const mongoQuery: Record<string, unknown> = { ...query }
 
+  if (query.author) {
+    mongoQuery.author = { $regex: query.author, $options: 'i' }
+  }
   if (query.tags && query.tags.length > 0) {
     mongoQuery.tags = { $in: query.tags }
   }

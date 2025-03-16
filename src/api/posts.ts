@@ -1,8 +1,11 @@
 import { Post } from '../types'
 
+export type PostSortBy = keyof Post
+export type PostSortOrder = 'ascending' | 'descending'
+
 type QueryParams = {
-  sortBy?: keyof Post
-  sortOrder?: 'ascending' | 'descending'
+  sortBy?: PostSortBy
+  sortOrder?: PostSortOrder
   author?: string
   tags?: string
 }
