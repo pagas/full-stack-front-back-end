@@ -8,6 +8,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettier from 'eslint-config-prettier'
 
+// just to push
 export default [
   {
     ignores: ['dist'],
