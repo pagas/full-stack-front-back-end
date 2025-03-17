@@ -1,5 +1,7 @@
 import { User, IUser } from '../db/models/user.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import { JWT_SECRET } from '../config/index.js'
 
 type UserInput = {
   username: string
@@ -34,4 +36,26 @@ export async function updateUser(
   return User.findByIdAndUpdate(id, data, {
     new: true,
   })
+}
+
+export async function loginUser({
+  username,
+  password,
+}: {
+  username: string
+  password: string
+}): Promise<string> {
+  const user = await User.findOne({ username })
+  if (!user) {
+    throw new Error('invalid username!')
+  }
+  const isPasswordCorrect = await bcrypt.compare(password, user.password)
+  if (!isPasswordCorrect) {
+    throw new Error('invalid password!')
+  }
+
+  const token = jwt.sign({ sub: user._id }, JWT_SECRET, {
+    expiresIn: '24h',
+  })
+  return token
 }

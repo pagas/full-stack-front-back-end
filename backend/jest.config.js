@@ -1,3 +1,8 @@
+import dotenv from 'dotenv'
+
+// Load environment variables from .env.test
+dotenv.config({ path: './.env' })
+
 export default {
   preset: 'ts-jest/presets/default-esm', // Use ts-jest with ESM support
   testEnvironment: 'node',

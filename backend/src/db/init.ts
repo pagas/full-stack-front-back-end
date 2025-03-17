@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { DATABASE_URL } from './config/config.js'
+import { DATABASE_URL } from '../config/index.js'
 
 export function initDatabase(): Promise<typeof mongoose> {
   mongoose.connection.on('open', () => {

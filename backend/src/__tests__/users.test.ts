@@ -6,6 +6,7 @@ import {
   getUserById,
   deleteUser,
   updateUser,
+  loginUser,
 } from '../services/users.js'
 import { User } from '../db/models/user.js'
 
@@ -80,5 +81,42 @@ describe('User Service', () => {
 
     expect(updatedUser).toBeDefined()
     expect(updatedUser?.username).toBe(updatedData.username)
+  })
+})
+
+describe('loginUser', () => {
+  test('should return a token for valid credentials', async () => {
+    // Arrange: Create a user
+    const userData = { username: 'testuser', password: 'password123' }
+    await createUser(userData)
+
+    // Act: Attempt to log in
+    const token = await loginUser(userData)
+
+    // Assert: Ensure a token is returned
+    expect(token).toBeDefined()
+    expect(typeof token).toBe('string')
+  })
+
+  test('should throw an error for invalid username', async () => {
+    // Arrange: Create a user
+    const userData = { username: 'testuser', password: 'password123' }
+    await createUser(userData)
+
+    // Act & Assert: Attempt to log in with an invalid username
+    await expect(
+      loginUser({ username: 'invaliduser', password: 'password123' }),
+    ).rejects.toThrow('invalid username!')
+  })
+
+  test('should throw an error for invalid password', async () => {
+    // Arrange: Create a user
+    const userData = { username: 'testuser', password: 'password123' }
+    await createUser(userData)
+
+    // Act & Assert: Attempt to log in with an invalid password
+    await expect(
+      loginUser({ username: 'testuser', password: 'wrongpassword' }),
+    ).rejects.toThrow('invalid password!')
   })
 })
