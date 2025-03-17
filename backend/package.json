@@ -9,7 +9,7 @@
     "dev:debug": "nodemon --inspect",
     "build": "tsc",
     "start": "cross-env NODE_ENV=production node -r dotenv/config dist/index.js",
-    "lint": "eslint ./src --ext .ts",
+    "lint": "eslint --config ./eslint.config.js ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' node dist/index.js"
   },
