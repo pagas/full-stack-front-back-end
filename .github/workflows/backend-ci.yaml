@@ -30,6 +30,13 @@ jobs:
         run: npm install
       - name: Print current working directory
         run: pwd
+      - name: Check if eslint.config.js exists
+        run: |
+          if [ -f ./eslint.config.js ]; then
+            echo "eslint.config.js exists."
+          else
+            echo "eslint.config.js is missing!" && exit 1
+          fi
       - name: Run linter on backend
         run: npm run lint
       - name: Print current working directory
