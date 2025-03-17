@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Clean npm cache
+        run: npm cache clean --force
       - name: Install dependencies
         run: npm install
       - name: Run linter on backend
