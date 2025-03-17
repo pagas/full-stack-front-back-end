@@ -6,8 +6,6 @@ yarn-error.log*
 
 # TypeScript compiled output
 dist/
-*.js
-*.js.map
 
 # Logs
 logs/
