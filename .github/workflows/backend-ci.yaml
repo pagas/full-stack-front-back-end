@@ -24,9 +24,15 @@ jobs:
           cache: 'npm'
       - name: Clean npm cache
         run: npm cache clean --force
+      - name: Print current working directory
+        run: pwd
       - name: Install dependencies
         run: npm install
+      - name: Print current working directory
+        run: pwd
       - name: Run linter on backend
         run: npm run lint
+      - name: Print current working directory
+        run: pwd
       - name: Run backend tests
         run: npm test
