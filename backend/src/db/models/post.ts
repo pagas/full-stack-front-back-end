@@ -1,11 +1,11 @@
-import mongoose, { Schema, Document, Model } from 'mongoose'
-import { ObjectId } from 'mongodb'
+import mongoose, { Schema, Document, Model, Types } from 'mongoose'
+import { IUser } from './user.js'
 
 // Define an interface representing a document in MongoDB
 export interface IPost extends Document {
-  _id: ObjectId
+  _id: Types.ObjectId
   title: string
-  author?: string
+  author: Types.ObjectId | IUser
   contents?: string
   tags?: string[]
   createdAt: Date
@@ -16,7 +16,7 @@ export interface IPost extends Document {
 const postSchema = new Schema<IPost>(
   {
     title: { type: String, required: true },
-    author: { type: String },
+    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     contents: { type: String },
     tags: [{ type: String }],
   },

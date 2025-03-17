@@ -1,4 +1,5 @@
 import { Post, IPost } from '../db/models/post.js'
+import { User } from '../db/models/user.js'
 
 // Define the type for query options
 interface QueryOptions {
@@ -24,8 +25,21 @@ async function listPosts(
   const mongoQuery: Record<string, unknown> = { ...query }
 
   if (query.author) {
-    mongoQuery.author = { $regex: query.author, $options: 'i' }
+    const matchingUsers = await User.find(
+      { username: { $regex: query.author, $options: 'i' } }, // Case-insensitive search
+      { _id: 1 }, // Only return the _id field
+    )
+
+    const userIds = matchingUsers.map((user) => user._id)
+
+    // If no matching users are found, return an empty array
+    if (userIds.length === 0) {
+      return []
+    }
+
+    mongoQuery.author = { $in: userIds } // Filter posts by matching user IDs
   }
+
   if (query.tags && query.tags.length > 0) {
     mongoQuery.tags = { $in: query.tags }
   }
@@ -59,6 +73,14 @@ export async function updatePost(
   postId: string,
   { title, author, contents, tags }: Partial<IPost>,
 ): Promise<IPost | null> {
+  // If `author` is provided, ensure it updates the User document
+  if (author) {
+    const userExists = await User.exists({ _id: author })
+    if (!userExists) {
+      throw new Error('Author not found')
+    }
+  }
+
   return await Post.findOneAndUpdate(
     { _id: postId },
     { $set: { title, author, contents, tags } },

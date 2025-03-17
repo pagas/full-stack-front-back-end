@@ -11,24 +11,44 @@ import {
   deletePost,
 } from '../services/posts.js'
 import { Post, IPost } from '../db/models/post.js'
+import { User, IUser } from '../db/models/user.js'
+
+const user1Id = new mongoose.Types.ObjectId()
+const user2Id = new mongoose.Types.ObjectId()
+
+const sampleUsers: Partial<IUser>[] = [
+  { _id: user1Id, username: 'Daniel Bugl', password: '1234' },
+  { _id: user2Id, username: 'Test Author', password: '1234' },
+]
 
 const samplePosts: Partial<IPost>[] = [
-  { title: 'Learning Redux', author: 'Daniel Bugl', tags: ['redux'] },
-  { title: 'Learn React Hooks', author: 'Daniel Bugl', tags: ['react'] },
+  { title: 'Learning Redux', tags: ['redux'] },
+  { title: 'Learn React Hooks', tags: ['react'] },
   {
     title: 'Full-Stack React Projects',
-    author: 'Daniel Bugl',
     tags: ['react', 'nodejs'],
   },
   { title: 'Guide to TypeScript' },
 ]
 
 let createdSamplePosts: IPost[] = []
+let createdSampleUsers: IUser[] = []
+
 beforeEach(async () => {
   await Post.deleteMany({})
+  await User.deleteMany({})
+
+  for (const user of sampleUsers) {
+    const createdUser = new User(user)
+    createdSampleUsers.push(await createdUser.save())
+  }
+
   createdSamplePosts = []
   for (const post of samplePosts) {
-    const createdPost = new Post(post)
+    const createdPost = new Post({
+      ...post,
+      author: user1Id,
+    })
     createdSamplePosts.push(await createdPost.save())
   }
 })
@@ -37,7 +57,7 @@ describe('creating posts', () => {
   test('with all parameters should succeed', async () => {
     const post: Partial<IPost> = {
       title: 'Hello Mongoose!',
-      author: 'Daniel Bugl',
+      author: user1Id,
       contents: 'This post is stored in a MongoDB database using Mongoose.',
       tags: ['mongoose', 'mongodb'],
     }
@@ -54,7 +74,7 @@ describe('creating posts', () => {
 
   test('without title should fail', async () => {
     const post: Partial<IPost> = {
-      author: 'Daniel Bugl',
+      author: user1Id,
       contents: 'Post with no title',
       tags: ['empty'],
     }
@@ -74,6 +94,7 @@ describe('creating posts', () => {
   test('with minimal parameters should succeed', async () => {
     const post: Partial<IPost> = {
       title: 'Only a title',
+      author: user1Id,
     }
     const createdPost = await createPost(post)
     expect(createdPost._id).toBeInstanceOf(mongoose.Types.ObjectId)
@@ -111,7 +132,7 @@ describe('listing posts', () => {
 
   test('should be able to filter posts by author', async () => {
     const posts = await listPostsByAuthor('Daniel Bugl', {})
-    expect(posts.length).toBe(3)
+    expect(posts.length).toBe(4)
   })
 
   test('should be able to filter posts by tag', async () => {
@@ -135,15 +156,22 @@ describe('getting a post', () => {
 describe('updating posts', () => {
   test('should update the specified property', async () => {
     await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: 'Test Author',
+      author: user2Id,
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
+      .populate<{ author: IUser }>('author', 'username')
+      .exec()
+
     expect(updatedPost).not.toBeNull()
-    expect(updatedPost?.author).toEqual('Test Author')
+    expect(updatedPost?.author).not.toBeNull()
+    expect((updatedPost?.author as IUser).username).toEqual('Test Author') // Check the username
+
+    expect(updatedPost?.author.username).toEqual('Test Author')
+    expect(updatedPost?.author.username).toEqual('Test Author')
   })
   test('should not update other properties', async () => {
     await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: 'Test Author',
+      author: user2Id,
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
     expect(updatedPost).not.toBeNull()
@@ -152,7 +180,7 @@ describe('updating posts', () => {
 
   test('should update the updatedAt timestamp', async () => {
     await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: 'Test Author',
+      author: user2Id,
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
     expect(updatedPost).not.toBeNull()
@@ -163,7 +191,7 @@ describe('updating posts', () => {
 
   test('should fail if the id does not exist', async () => {
     const post = await updatePost('000000000000000000000000', {
-      author: 'Test Author',
+      author: user2Id,
     })
     expect(post).toBeNull()
   })
