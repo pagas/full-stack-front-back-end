@@ -216,13 +216,27 @@ describe('updating posts', () => {
 
 describe('deleting posts', () => {
   test('should remove the post from the database', async () => {
-    const result = await deletePost(createdSamplePosts[0]._id.toString())
+    const result = await deletePost(
+      user1Id.toString(),
+      createdSamplePosts[0]._id.toString(),
+    )
     expect(result.deletedCount).toEqual(1)
     const deletedPost = await Post.findById(createdSamplePosts[0]._id)
     expect(deletedPost).toEqual(null)
   })
   test('should fail if the id does not exist', async () => {
-    const result = await deletePost('000000000000000000000000')
+    const result = await deletePost(
+      user1Id.toString(),
+      '000000000000000000000000',
+    )
+    expect(result.deletedCount).toEqual(0)
+  })
+
+  test('should fail if the user is not the author', async () => {
+    const result = await deletePost(
+      user2Id.toString(),
+      createdSamplePosts[0]._id.toString(),
+    )
     expect(result.deletedCount).toEqual(0)
   })
 })

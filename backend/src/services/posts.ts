@@ -97,7 +97,8 @@ than 30 days and delete them. Of course, this means that we need to always filte
 out already deleted posts in the listPosts function and that we need to write test cases for this behavior!
 */
 export async function deletePost(
+  authorId: string,
   postId: string,
 ): Promise<{ deletedCount?: number }> {
-  return await Post.deleteOne({ _id: postId })
+  return await Post.deleteOne({ _id: postId, author: authorId })
 }
