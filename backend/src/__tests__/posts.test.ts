@@ -156,30 +156,33 @@ describe('getting a post', () => {
 
 describe('updating posts', () => {
   test('should update the specified property', async () => {
-    await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: user2Id,
+    await updatePost(user1Id.toString(), createdSamplePosts[0]._id.toString(), {
+      title: 'Updated Title',
+      contents: 'Updated Content',
+      tags: ['updated'],
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
-      .populate<{ author: IUser }>('author', 'username')
-      .exec()
-
     expect(updatedPost).not.toBeNull()
-    expect(updatedPost?.author).not.toBeNull()
-    expect(updatedPost?.author.username).toEqual('Test Author')
-    expect(updatedPost?.author.username).toEqual('Test Author')
+    expect(updatedPost?.title).toEqual('Updated Title')
+    expect(updatedPost?.contents).toEqual('Updated Content')
+    expect(updatedPost?.tags).toEqual(['updated'])
   })
+
   test('should not update other properties', async () => {
-    await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: user2Id,
+    const beforeUpdate = await Post.findById(createdSamplePosts[0]._id)
+    await updatePost(user1Id.toString(), createdSamplePosts[0]._id.toString(), {
+      title: 'Updated title',
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
     expect(updatedPost).not.toBeNull()
-    expect(updatedPost?.title).toEqual('Learning Redux')
+    expect(updatedPost?.title).toEqual('Updated title')
+    expect(updatedPost?.contents).toEqual(beforeUpdate?.contents)
+    expect(updatedPost?.tags).toEqual(beforeUpdate?.tags)
   })
 
   test('should update the updatedAt timestamp', async () => {
-    await updatePost(createdSamplePosts[0]._id.toString(), {
-      author: user2Id,
+    await updatePost(user1Id.toString(), createdSamplePosts[0]._id.toString(), {
+      title: 'Updated title',
     })
     const updatedPost = await Post.findById(createdSamplePosts[0]._id)
     expect(updatedPost).not.toBeNull()
@@ -189,9 +192,24 @@ describe('updating posts', () => {
   })
 
   test('should fail if the id does not exist', async () => {
-    const post = await updatePost('000000000000000000000000', {
-      author: user2Id,
-    })
+    const post = await updatePost(
+      user1Id.toString(),
+      '000000000000000000000000',
+      {
+        author: user2Id,
+      },
+    )
+    expect(post).toBeNull()
+  })
+
+  test('should fail if the user is not the author', async () => {
+    const post = await updatePost(
+      user2Id.toString(),
+      createdSamplePosts[0]._id.toString(),
+      {
+        title: 'Updated title',
+      },
+    )
     expect(post).toBeNull()
   })
 })

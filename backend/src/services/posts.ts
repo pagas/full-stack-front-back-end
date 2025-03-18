@@ -21,10 +21,10 @@ export type CreatePostData = {
 }
 
 export async function createPost(
-  userId: string,
+  authorId: string,
   { title, contents, tags }: CreatePostData,
 ): Promise<IPost> {
-  return Post.create({ title, author: userId, contents, tags })
+  return Post.create({ title, author: authorId, contents, tags })
 }
 
 async function listPosts(
@@ -79,20 +79,13 @@ export async function getPostById(postId: string): Promise<IPost | null> {
 }
 
 export async function updatePost(
+  authorId: string,
   postId: string,
-  { title, author, contents, tags }: Partial<IPost>,
+  { title, contents, tags }: Partial<IPost>,
 ): Promise<IPost | null> {
-  // If `author` is provided, ensure it updates the User document
-  if (author) {
-    const userExists = await User.exists({ _id: author })
-    if (!userExists) {
-      throw new Error('Author not found')
-    }
-  }
-
   return await Post.findOneAndUpdate(
-    { _id: postId },
-    { $set: { title, author, contents, tags } },
+    { _id: postId, author: authorId },
+    { $set: { title, contents, tags } },
     { new: true },
   )
 }
