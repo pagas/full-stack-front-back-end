@@ -8,6 +8,10 @@
     "esModuleInterop": true, // Ensures compatibility with CommonJS modules
     "forceConsistentCasingInFileNames": true, // Enforces consistent file name casing
     "skipLibCheck": true, // Skips type checking for declaration files
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
     "types": [
       "node",
       "jest"
