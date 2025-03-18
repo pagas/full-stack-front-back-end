@@ -6,7 +6,7 @@ export interface IPost extends Document {
   _id: Types.ObjectId
   title: string
   author: Types.ObjectId | IUser
-  contents?: string
+  contents: string
   tags?: string[]
   createdAt: Date
   updatedAt: Date
@@ -17,7 +17,7 @@ const postSchema = new Schema<IPost>(
   {
     title: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    contents: { type: String },
+    contents: { type: String, required: true },
     tags: [{ type: String }],
   },
   { timestamps: true },

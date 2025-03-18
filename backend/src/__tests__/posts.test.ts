@@ -12,6 +12,7 @@ import {
 } from '../services/posts.js'
 import { Post, IPost } from '../db/models/post.js'
 import { User, IUser } from '../db/models/user.js'
+import { CreatePostData } from '../services/posts.js'
 
 const user1Id = new mongoose.Types.ObjectId()
 const user2Id = new mongoose.Types.ObjectId()
@@ -21,14 +22,15 @@ const sampleUsers: Partial<IUser>[] = [
   { _id: user2Id, username: 'Test Author', password: '1234' },
 ]
 
-const samplePosts: Partial<IPost>[] = [
-  { title: 'Learning Redux', tags: ['redux'] },
-  { title: 'Learn React Hooks', tags: ['react'] },
+const samplePosts: CreatePostData[] = [
+  { title: 'Learning Redux', contents: 'Content', tags: ['redux'] },
+  { title: 'Learn React Hooks', contents: 'Content', tags: ['react'] },
   {
     title: 'Full-Stack React Projects',
+    contents: 'Content',
     tags: ['react', 'nodejs'],
   },
-  { title: 'Guide to TypeScript' },
+  { title: 'Guide to TypeScript', contents: 'Content' },
 ]
 
 let createdSamplePosts: IPost[] = []
@@ -55,32 +57,31 @@ beforeEach(async () => {
 
 describe('creating posts', () => {
   test('with all parameters should succeed', async () => {
-    const post: Partial<IPost> = {
+    const postData = {
       title: 'Hello Mongoose!',
-      author: user1Id,
       contents: 'This post is stored in a MongoDB database using Mongoose.',
       tags: ['mongoose', 'mongodb'],
     }
-    const createdPost = await createPost(post)
+    const createdPost = await createPost(user1Id.toString(), postData)
 
     expect(createdPost._id).toBeInstanceOf(mongoose.Types.ObjectId)
 
     const foundPost = await Post.findById(createdPost._id)
 
-    expect(foundPost).toEqual(expect.objectContaining(post))
+    expect(foundPost).toEqual(expect.objectContaining(postData))
     expect(foundPost?.createdAt).toBeInstanceOf(Date)
     expect(foundPost?.updatedAt).toBeInstanceOf(Date)
   })
 
   test('without title should fail', async () => {
-    const post: Partial<IPost> = {
-      author: user1Id,
+    const postData = {
+      title: '',
       contents: 'Post with no title',
       tags: ['empty'],
     }
 
     try {
-      await createPost(post)
+      await createPost(user1Id.toString(), postData)
     } catch (err) {
       expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
       if (err instanceof mongoose.Error.ValidationError) {
@@ -92,11 +93,11 @@ describe('creating posts', () => {
   })
 
   test('with minimal parameters should succeed', async () => {
-    const post: Partial<IPost> = {
+    const postData = {
       title: 'Only a title',
-      author: user1Id,
+      contents: 'This post has no tags.',
     }
-    const createdPost = await createPost(post)
+    const createdPost = await createPost(user1Id.toString(), postData)
     expect(createdPost._id).toBeInstanceOf(mongoose.Types.ObjectId)
   })
 })
@@ -164,8 +165,6 @@ describe('updating posts', () => {
 
     expect(updatedPost).not.toBeNull()
     expect(updatedPost?.author).not.toBeNull()
-    expect((updatedPost?.author as IUser).username).toEqual('Test Author') // Check the username
-
     expect(updatedPost?.author.username).toEqual('Test Author')
     expect(updatedPost?.author.username).toEqual('Test Author')
   })

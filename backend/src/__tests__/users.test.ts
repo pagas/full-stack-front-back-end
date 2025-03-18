@@ -10,19 +10,10 @@ import {
 } from '../services/users.js'
 import { User } from '../db/models/user.js'
 
-// const sampleUsers: Partial<IUser>[] = [
-//   { username: 'Daniel Bugl', password: '1234' },
-//   { username: 'Test Author', password: '1234' },
-// ]
-
 // let createdSampleUsers: IUser[] = []
 beforeEach(async () => {
   // Clear the User collection before each test
   await User.deleteMany({})
-  //   for (const user of sampleUsers) {
-  //     const createdUser = new User(user)
-  //     createdSampleUsers.push(await createdUser.save())
-  //   }
 })
 
 describe('User Service', () => {

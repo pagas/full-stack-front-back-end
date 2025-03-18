@@ -14,8 +14,17 @@ type QueryFilter = {
 
 export type QueryParams = QueryOptions & QueryFilter
 
-export async function createPost(data: Partial<IPost>): Promise<IPost> {
-  return Post.create(data)
+export type CreatePostData = {
+  title: string
+  contents: string
+  tags?: string[]
+}
+
+export async function createPost(
+  userId: string,
+  { title, contents, tags }: CreatePostData,
+): Promise<IPost> {
+  return Post.create({ title, author: userId, contents, tags })
 }
 
 async function listPosts(
