@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "lint:frontend": "cd frontend && npx eslint . --config eslint.config.js",
-    "lint:backend": "cd backend && npx eslint . --config eslint.config.js",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:backend": "npm --prefix backend run lint",
     "lint-all": "npm run lint:frontend && npm run lint:backend"
   },
   "repository": {
