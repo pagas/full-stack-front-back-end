@@ -15,7 +15,7 @@ services:
       - blog-database
   blog-frontend:
     build:
-      context: .
+      context: frontend/
       args:
         VITE_BACKEND_URL: http://localhost:3001/api/v1
     ports:
