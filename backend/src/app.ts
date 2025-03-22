@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken'
 import { requireAuth } from './middleware/jwt.js'
 import dotenv from 'dotenv'
 import { AuthenticatedRequest } from './types/auth.js'
+import { postsRoutes } from './routes/posts.js'
+import { userRoutes } from './routes/users.js'
 import cors from 'cors'
 
 dotenv.config()
@@ -59,5 +61,7 @@ app.use(
     next(err)
   },
 )
+postsRoutes(app)
+userRoutes(app)
 
 export { app }
