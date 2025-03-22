@@ -11,12 +11,13 @@ services:
     environment:
       - PORT=3001
       - DATABASE_URL=mongodb://host.docker.internal:27017/blog
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
     ports:
       - '3001:3001'
     volumes:
       - ./backend:/app # Bind mount for live code changes
       - /app/node_modules # Prevent overwriting node_modules
-    command: ['npx', 'nodemon', 'index.js'] # Optional: Override CMD if needed
   blog-frontend:
     build:
       context: frontend/

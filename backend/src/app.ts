@@ -3,18 +3,20 @@ import jwt from 'jsonwebtoken'
 import { requireAuth } from './middleware/jwt.js'
 import dotenv from 'dotenv'
 import { AuthenticatedRequest } from './types/auth.js'
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express()
 // Middleware to parse JSON bodies
 app.use(express.json())
+app.use(cors())
 
 // JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello, world!!' })
+  res.json({ message: 'Hello, world!' })
 })
 
 // Login route to issue a JWT token

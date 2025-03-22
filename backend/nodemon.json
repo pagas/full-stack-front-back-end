@@ -1,6 +1,7 @@
 {
   "watch": ["./src", ".env", "package-lock.json"],
   "ext": "ts",
-  "ignore": ["dist"],
-  "exec": "npx tsc --noEmit && npx tsx -r dotenv/config src/index.ts"
+  "ignore": ["dist", "node_modules"],
+  "exec": "npx tsc --noEmit && npx tsx -r dotenv/config src/index.ts",
+  "legacyWatch": true
 }
