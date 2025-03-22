@@ -1,0 +1,16 @@
+# filepath: c:\work\nodejs\simplets\frontend\Dockerfile.dev
+FROM node:23
+WORKDIR /app
+
+# Copy only package files to install dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy the rest of the source code
+COPY . .
+
+# Expose the port used by the Vite development server
+EXPOSE 3000
+
+# Run the Vite development server
+CMD ["npm", "run", "dev-exposed"]

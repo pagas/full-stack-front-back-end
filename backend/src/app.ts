@@ -13,6 +13,10 @@ app.use(express.json())
 // JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello, world!!' })
+})
+
 // Login route to issue a JWT token
 app.post('/login', (req: Request, res: Response) => {
   const { username } = req.body
