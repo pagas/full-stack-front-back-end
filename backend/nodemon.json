@@ -2,5 +2,5 @@
   "watch": ["./src", ".env", "package-lock.json"],
   "ext": "ts",
   "ignore": ["dist"],
-  "exec": "node --loader ts-node/esm -r dotenv/config src/index.ts"
+  "exec": "npx tsc --noEmit && npx tsx -r dotenv/config src/index.ts"
 }

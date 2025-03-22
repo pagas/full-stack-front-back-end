@@ -1,5 +1,6 @@
 import { Express } from 'express'
 import { requireAuth } from '../middleware/jwt.js'
+import type { AuthenticatedRequest } from '../types/auth.js'
 
 import {
   listAllPosts,
@@ -47,34 +48,47 @@ export function postsRoutes(app: Express): void {
     }
   })
 
-  app.post('/api/v1/posts', requireAuth, async (req, res) => {
-    try {
-      const post = await createPost(req.auth!.sub, req.body)
-      return res.json(post)
-    } catch (err) {
-      console.error('error creating post', err)
-      return res.status(500).end()
-    }
-  })
+  app.post(
+    '/api/v1/posts',
+    requireAuth,
+    async (req: AuthenticatedRequest, res) => {
+      console.log('req.auth', req.auth)
+      try {
+        const post = await createPost(req.auth!.sub, req.body)
+        res.json(post)
+      } catch (err) {
+        console.error('error creating post', err)
+        res.status(500).end()
+      }
+    },
+  )
 
-  app.patch('/api/v1/posts/:id', requireAuth, async (req, res) => {
-    try {
-      const post = await updatePost(req.auth!.sub, req.params.id, req.body)
-      return res.json(post)
-    } catch (err) {
-      console.error('error updating post', err)
-      return res.status(500).end()
-    }
-  })
+  app.patch(
+    '/api/v1/posts/:id',
+    requireAuth,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const post = await updatePost(req.auth!.sub, req.params.id, req.body)
+        return res.json(post)
+      } catch (err) {
+        console.error('error updating post', err)
+        return res.status(500).end()
+      }
+    },
+  )
 
-  app.delete('/api/v1/posts/:id', requireAuth, async (req, res) => {
-    try {
-      const { deletedCount } = await deletePost(req.auth!.sub, req.params.id)
-      if (deletedCount === 0) return res.sendStatus(404)
-      return res.status(204).end()
-    } catch (err) {
-      console.error('error deleting post', err)
-      return res.status(500).end()
-    }
-  })
+  app.delete(
+    '/api/v1/posts/:id',
+    requireAuth,
+    async (req: AuthenticatedRequest, res) => {
+      try {
+        const { deletedCount } = await deletePost(req.auth!.sub, req.params.id)
+        if (deletedCount === 0) return res.sendStatus(404)
+        return res.status(204).end()
+      } catch (err) {
+        console.error('error deleting post', err)
+        return res.status(500).end()
+      }
+    },
+  )
 }

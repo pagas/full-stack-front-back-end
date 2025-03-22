@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { DATABASE_URL } from '../config/index.js'
 
-export function initDatabase(): Promise<typeof mongoose> {
+export async function initDatabase(): Promise<mongoose.Mongoose> {
   mongoose.connection.on('open', () => {
     console.info('Successfully connected to database:', DATABASE_URL)
   })

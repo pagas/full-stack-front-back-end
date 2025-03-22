@@ -19,7 +19,7 @@
     "allowSyntheticDefaultImports": true // Allows default imports for CommonJS modules
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
