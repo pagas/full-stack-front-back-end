@@ -3,11 +3,14 @@ type SignUpParams = {
   password: string
 }
 
+type LoginParams = {
+  username: string
+  password: string
+}
+
 // Define the type for the signup response
 type SignUpResponse = {
-  id: string
   username: string
-  token: string
 }
 
 export const signup = async ({
@@ -20,5 +23,22 @@ export const signup = async ({
     body: JSON.stringify({ username, password }),
   })
   if (!res.ok) throw new Error('failed to sign up')
+  return await res.json()
+}
+
+type LoginResponse = {
+  token: string
+}
+
+export const login = async ({
+  username,
+  password,
+}: LoginParams): Promise<LoginResponse> => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  })
+  if (!res.ok) throw new Error('failed to login')
   return await res.json()
 }

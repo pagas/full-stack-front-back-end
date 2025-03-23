@@ -4,7 +4,7 @@ import { JSX } from 'react'
 export function Header(): JSX.Element {
   return (
     <div>
-      <Link to='/signup'>Sign Up</Link>
+      <Link to='/login'>Log In</Link> | <Link to='/signup'>Sign Up</Link>{' '}
     </div>
   )
 }
