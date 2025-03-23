@@ -33,22 +33,6 @@ async function listPosts(
 ): Promise<IPost[]> {
   const mongoQuery: Record<string, unknown> = { ...query }
 
-  if (query.author) {
-    const matchingUsers = await User.find(
-      { username: { $regex: query.author, $options: 'i' } }, // Case-insensitive search
-      { _id: 1 }, // Only return the _id field
-    )
-
-    const userIds = matchingUsers.map((user) => user._id)
-
-    // If no matching users are found, return an empty array
-    if (userIds.length === 0) {
-      return []
-    }
-
-    mongoQuery.author = { $in: userIds } // Filter posts by matching user IDs
-  }
-
   if (query.tags && query.tags.length > 0) {
     mongoQuery.tags = { $in: query.tags }
   }
@@ -61,10 +45,12 @@ export async function listAllPosts(options: QueryOptions): Promise<IPost[]> {
 }
 
 export async function listPostsByAuthor(
-  author: string,
+  authorUsername: string,
   options: QueryOptions,
 ): Promise<IPost[]> {
-  return await listPosts({ author }, options)
+  const user = await User.findOne({ username: authorUsername })
+  if (!user) return []
+  return await listPosts({ author: user._id.toString() }, options)
 }
 
 export async function listPostsByTag(
