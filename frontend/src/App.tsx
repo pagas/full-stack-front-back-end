@@ -1,12 +1,17 @@
 import { JSX } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Blog } from './pages/Blog.jsx'
+import { Blog } from './pages/Blog.tsx'
+import { Signup } from './pages/Signup.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Blog />,
+  },
+  {
+    path: '/signup',
+    element: <Signup />,
   },
 ])
 

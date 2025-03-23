@@ -2,6 +2,7 @@ import { CreatePost } from '@components/CreatePost.js'
 import { PostList } from '@components/PostList.js'
 import { PostFilter } from '@components/PostFilter.js'
 import { PostSorting } from '@components/PostSorting.js'
+import { Header } from '@components/Header.jsx'
 import { useQuery } from '@tanstack/react-query'
 import { getPosts, PostSortBy, PostSortOrder } from '@api/posts.js'
 import { useState, JSX } from 'react'
@@ -23,6 +24,10 @@ export function Blog(): JSX.Element {
   return (
     <div style={{ padding: 8 }}>
       <h1>POST FORM</h1>
+      <Header />
+      <br />
+      <hr />
+      <br />
       <CreatePost />
       <br />
       <hr />
