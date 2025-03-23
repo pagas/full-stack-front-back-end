@@ -49,7 +49,7 @@ app.get(
 // Error handling middleware for JWT
 app.use(
   (
-    err: any,
+    err: Error,
     req: AuthenticatedRequest,
     res: Response,
     next: NextFunction,
