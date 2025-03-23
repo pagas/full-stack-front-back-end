@@ -59,3 +59,16 @@ export async function loginUser({
   })
   return token
 }
+
+export async function getUserInfoById(
+  userId: string,
+): Promise<{ username: string }> {
+  try {
+    const user = await User.findById(userId)
+    if (!user) return { username: userId }
+    return { username: user.username }
+  } catch (err) {
+    console.error(err)
+    return { username: userId }
+  }
+}

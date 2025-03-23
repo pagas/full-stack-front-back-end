@@ -7,8 +7,10 @@ import {
   deleteUser,
   updateUser,
   loginUser,
+  getUserInfoById,
 } from '../services/users.js'
 import { User } from '../db/models/user.js'
+import { Types } from 'mongoose'
 
 // let createdSampleUsers: IUser[] = []
 beforeEach(async () => {
@@ -109,5 +111,30 @@ describe('loginUser', () => {
     await expect(
       loginUser({ username: 'testuser', password: 'wrongpassword' }),
     ).rejects.toThrow('invalid password!')
+  })
+})
+
+describe('getUserInfoById', () => {
+  test('should return the username for a valid user ID', async () => {
+    // Arrange: Create a user
+    const userData = { username: 'testuser', password: 'password123' }
+    const createdUser = await createUser(userData)
+
+    // Act: Get the user info
+    const userInfo = await getUserInfoById(createdUser._id.toString())
+
+    // Assert: Ensure the username is returned
+    expect(userInfo).toBeDefined()
+    expect(userInfo.username).toBe(userData.username)
+  })
+
+  test('should return the user ID for an invalid user ID', async () => {
+    // Act: Get the user info for an invalid user ID
+    const invalidUserId = new Types.ObjectId().toString()
+    const userInfo = await getUserInfoById(invalidUserId)
+
+    // Assert: Ensure the user ID is returned
+    expect(userInfo).toBeDefined()
+    expect(userInfo.username).toBe(invalidUserId)
   })
 })
