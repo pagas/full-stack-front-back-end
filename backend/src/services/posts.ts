@@ -1,5 +1,5 @@
 import { Post, IPost } from '../db/models/post.js'
-import { User } from '../db/models/user.js'
+import { User, IUser } from '../db/models/user.js'
 import { FilterQuery } from 'mongoose'
 
 // Define the type for query options
@@ -13,6 +13,7 @@ type QueryFilter = {
   tags?: string[]
 }
 
+type IPostResponse = Omit<IPost, 'author'> & { author: IUser }
 export type QueryParams = QueryOptions & QueryFilter
 
 export type CreatePostData = {
@@ -31,8 +32,11 @@ export async function createPost(
 async function listPosts(
   query: FilterQuery<IPost> = {},
   { sortBy = 'createdAt', sortOrder = 'descending' }: QueryOptions = {},
-): Promise<IPost[]> {
-  return await Post.find(query).sort({ [sortBy]: sortOrder })
+): Promise<IPostResponse[]> {
+  return await Post.find(query)
+    .sort({ [sortBy]: sortOrder })
+    .populate<{ author: IUser }>('author', '_id username')
+    .lean()
 }
 
 export async function listAllPosts(options: QueryOptions): Promise<IPost[]> {

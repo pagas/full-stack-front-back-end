@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import { Post as PostProps } from '../types'
+import { formatDistanceToNow } from 'date-fns'
 
 export function Post({
   title,
@@ -8,6 +9,9 @@ export function Post({
   createdAt,
   updatedAt,
 }: PostProps): JSX.Element {
+  const formatRelativeTime = (date: Date): string =>
+    formatDistanceToNow(new Date(date), { addSuffix: true }) // e.g., "20 seconds ago"
+
   return (
     <article>
       <h3>{title}</h3>
@@ -15,16 +19,16 @@ export function Post({
       {author && (
         <em>
           <br />
-          Written by <strong>{author}</strong>
+          Written by <strong>{author.username}</strong>
         </em>
       )}
       <footer>
         <small>
-          Created at: {new Date(createdAt).toLocaleString()}
+          Created: {formatRelativeTime(createdAt)}
           {updatedAt && (
             <>
               <br />
-              Updated at: {new Date(updatedAt).toLocaleString()}
+              Updated: {formatRelativeTime(updatedAt)}
             </>
           )}
         </small>
