@@ -11,7 +11,8 @@
     "start": "cross-env NODE_ENV=production node -r dotenv/config dist/index.js",
     "lint": "eslint --config ./eslint.config.js ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
-    "debug": "cross-env NODE_OPTIONS='--inspect-brk' node dist/index.js"
+    "debug": "cross-env NODE_OPTIONS='--inspect-brk' node dist/index.js",
+    "seed": "tsx -r dotenv/config ./src/seed.ts"
   },
   "author": "",
   "license": "ISC",

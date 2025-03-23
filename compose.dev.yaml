@@ -32,3 +32,14 @@ services:
     volumes:
       - ./frontend:/app:delegated # Bind mount for live code changes
       - /app/node_modules # Prevent overwriting node_modules
+  seed:
+    build:
+      context: backend/
+      dockerfile: Dockerfile.dev
+    command: ['npm', 'run', 'seed']
+    environment:
+      - DATABASE_URL=mongodb://host.docker.internal:27017/blog
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - blog-database
