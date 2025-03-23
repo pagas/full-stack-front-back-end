@@ -1,5 +1,6 @@
 import { Post, IPost } from '../db/models/post.js'
 import { User } from '../db/models/user.js'
+import { FilterQuery } from 'mongoose'
 
 // Define the type for query options
 interface QueryOptions {
@@ -28,16 +29,10 @@ export async function createPost(
 }
 
 async function listPosts(
-  query: QueryFilter = {}, // Filter for author or tag
+  query: FilterQuery<IPost> = {},
   { sortBy = 'createdAt', sortOrder = 'descending' }: QueryOptions = {},
 ): Promise<IPost[]> {
-  const mongoQuery: Record<string, unknown> = { ...query }
-
-  if (query.tags && query.tags.length > 0) {
-    mongoQuery.tags = { $in: query.tags }
-  }
-
-  return await Post.find(mongoQuery).sort({ [sortBy]: sortOrder })
+  return await Post.find(query).sort({ [sortBy]: sortOrder })
 }
 
 export async function listAllPosts(options: QueryOptions): Promise<IPost[]> {
@@ -48,16 +43,27 @@ export async function listPostsByAuthor(
   authorUsername: string,
   options: QueryOptions,
 ): Promise<IPost[]> {
-  const user = await User.findOne({ username: authorUsername })
-  if (!user) return []
-  return await listPosts({ author: user._id.toString() }, options)
+  const matchingUsers = await User.find(
+    { username: { $regex: authorUsername, $options: 'i' } }, // Case-insensitive search
+    { _id: 1 }, // Only return the _id field
+  )
+
+  const userIds = matchingUsers.map((user) => user._id)
+
+  // If no matching users are found, return an empty array
+  if (userIds.length === 0) {
+    return []
+  }
+
+  if (!matchingUsers) return []
+  return await listPosts({ author: { $in: userIds } }, options)
 }
 
 export async function listPostsByTag(
   tags: string[],
   options: QueryOptions,
 ): Promise<IPost[]> {
-  return await listPosts({ tags }, options)
+  return await listPosts({ tags: { $in: tags } }, options)
 }
 
 export async function getPostById(postId: string): Promise<IPost | null> {

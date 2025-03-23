@@ -52,7 +52,6 @@ export function postsRoutes(app: Express): void {
     '/api/v1/posts',
     requireAuth,
     async (req: AuthenticatedRequest, res) => {
-      console.log('req.auth', req.auth)
       try {
         const post = await createPost(req.auth!.sub, req.body)
         res.json(post)
