@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ['react-router-dom'],
+      include: ['react-router-dom', 'react-router'],
     },
     ssr: {
       noExternal: [/^react-router/, /^@remix-run/],
