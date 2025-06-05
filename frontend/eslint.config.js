@@ -12,7 +12,7 @@ import prettier from 'eslint-config-prettier'
 export default [
   {
     ignores: ['dist'],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
