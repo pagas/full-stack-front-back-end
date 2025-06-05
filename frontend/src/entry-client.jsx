@@ -11,9 +11,9 @@ if (rootElement) {
   ReactDOM.hydrateRoot(
     rootElement,
     <React.StrictMode>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <App>
+        <RouterProvider router={router} />
+      </App>
     </React.StrictMode>,
   )
 } else {
