@@ -22,5 +22,23 @@ export default defineConfig(({ mode }) => {
         '@api': path.resolve(__dirname, 'src/api'), // Alias for components
       },
     },
+    optimizeDeps: {
+      include: ['react-router-dom'],
+    },
+    ssr: {
+      noExternal: [/^react-router/, /^@remix-run/],
+    },
+    // ssr: {
+    //   noExternal: [/^react-router/, /^@remix-run/], // ← MUST use regex for subpaths!
+    // },
+    // ssr: {
+    //   noExternal: ['react-router-dom'], // Force Vite to treat react-router-dom as ESM
+    // },
+    // build: {
+    //   ssr: true, // Enable SSR mode
+    //   rollupOptions: {
+    //     input: 'src/entry-client.jsx', // Entry for client-side
+    //   },
+    // },
   }
 })

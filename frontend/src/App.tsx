@@ -1,34 +1,31 @@
-import { JSX } from 'react'
+import { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Blog } from './pages/Blog.tsx'
-import { Signup } from './pages/Signup.tsx'
 import { AuthContextProvider } from './contexts/AuthContext.jsx'
-import { Login } from './pages/Login.jsx'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Blog />,
-  },
-  {
-    path: '/signup',
-    element: <Signup />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-])
-
+// Create the query client instance outside the component
 const queryClient = new QueryClient()
 
-export function App(): JSX.Element {
+interface AppProps {
+  children: ReactNode
+}
+
+export function App({ children }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+      <AuthContextProvider>{children}</AuthContextProvider>
     </QueryClientProvider>
   )
 }
+// import { JSX } from 'react'
+// import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+// import { AuthContextProvider } from './contexts/AuthContext.jsx'
+
+// const queryClient = new QueryClient()
+
+// export function App({ children }: { children: React.ReactNode }): JSX.Element {
+//   return (
+//     <QueryClientProvider client={queryClient}>
+//       <AuthContextProvider>{children}</AuthContextProvider>
+//     </QueryClientProvider>
+//   )
+// }
